@@ -1,6 +1,7 @@
 module Api
     module V1
       class RealtyController < ApplicationController
+        before_action :authenticate_request!
         before_action :set_realty, only:  [:show,:images]
 
         def index
