@@ -10,7 +10,8 @@ module Api
           .joins("INNER JOIN provinces ON provinces.id = communes.province_id")
           .joins("INNER JOIN regions ON regions.id = communes.region_id")
           .joins("LEFT JOIN publications ON publications.realty_id = realties.id")
-          render json: @realty
+
+          render json: @realty.paginate(page: params[:page], per_page: 100)
         end
 
         def images
