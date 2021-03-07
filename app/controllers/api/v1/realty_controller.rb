@@ -5,12 +5,16 @@ module Api
         before_action :set_realty, only:  [:show,:images]
 
         def index
-          @realty = Realty.all
+          @realty = Realty.select('*,communes.name as commune,provinces.name as provinces,regions.name as regions')
+          .joins("INNER JOIN communes ON communes.id = realties.commune_id")
+          .joins("INNER JOIN provinces ON provinces.id = communes.province_id")
+          .joins("INNER JOIN regions ON regions.id = communes.region_id")
+          .joins("LEFT JOIN publications ON publications.realty_id = realties.id")
           render json: @realty
         end
 
         def images
-          @fileUpload = FileUpload.find_by(id: @realty.id)
+          @fileUpload = FileUpload.find_by(id: @realty.id).all
           render json: @fileUpload
         end
 
