@@ -1,11 +1,11 @@
 module Api
     module V1
       class RealtyController < ApplicationController
-        #before_action :authenticate_request!
+        before_action :authenticate_request!
         before_action :set_realty, only:  [:show,:images]
 
         def index
-          @realty = Realty.select('*,communes.name as commune,provinces.name as provinces,regions.name as regions')
+          @realty = Realty.select('*,realties.id as id,communes.name as commune,provinces.name as provinces,regions.name as regions')
           .joins("INNER JOIN communes ON communes.id = realties.commune_id")
           .joins("INNER JOIN provinces ON provinces.id = communes.province_id")
           .joins("INNER JOIN regions ON regions.id = communes.region_id")
