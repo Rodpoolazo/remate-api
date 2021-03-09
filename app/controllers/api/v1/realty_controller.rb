@@ -9,7 +9,7 @@ module Api
           .joins("INNER JOIN communes ON communes.id = realties.commune_id")
           .joins("INNER JOIN provinces ON provinces.id = communes.province_id")
           .joins("INNER JOIN regions ON regions.id = communes.region_id")
-          .joins("LEFT JOIN publications ON publications.realty_id = realties.id")
+          .joins("LEFT JOIN publications ON publications.realty_id = realties.id").order("realties.id")
 
           render json: @realty.paginate(page: params[:page], per_page: 100)
         end
