@@ -15,8 +15,8 @@ module Api
         end
 
         def images
-          @fileUpload = FileUpload.find_by(id: @realty.id).all
-          render json: @fileUpload
+          @fileUpload = FileUpload.where(model_id: @realty.id, model: "realty")
+          render json: @fileUpload ? @fileUpload : []
         end
 
         def show
