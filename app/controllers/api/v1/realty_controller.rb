@@ -44,10 +44,10 @@ module Api
         end
 
         def images
-          @url = request.base_url
+          @url = 'https://remateapp.herokuapp.com/uploads/'
           @fileUpload = FileUpload.select("
             id ,
-            CONCAT('"+@url+"','/uploads/',file_name) as file_name,
+            CONCAT('"+@url+"',file_name) as file_name,
             model ,
             model_id,
             created_at ,
