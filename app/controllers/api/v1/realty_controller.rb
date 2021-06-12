@@ -45,17 +45,7 @@ module Api
 
         def images
           @url = 'https://remateapp.herokuapp.com/uploads/'
-          @fileUpload = FileUpload.select("
-            id ,
-            CONCAT('"+@url+"',file_name) as file_name,
-            model ,
-            model_id,
-            created_at ,
-            updated_at ,
-            coalesce(title, '') as title ,
-            coalesce(description, '') as description,
-            coalesce(original_file_name, '') as original_file_name,
-            case WHEN coalesce(status, 0) = 1  THEN 'publicado' else 'no publicado' end as status").where(model_id: @realty.id, model: "realty")
+          @fileUpload = rails_blob_url(Realty.find(params[:id]).uploads[0]) #Realty.where(id: @realty.id)
           render json: @fileUpload ? @fileUpload : []
         end
 
