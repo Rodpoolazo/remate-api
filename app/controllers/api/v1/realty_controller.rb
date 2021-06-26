@@ -44,9 +44,8 @@ module Api
         end
 
         def images
-          @url = 'https://remateapp.herokuapp.com/uploads/'
-          @fileUpload = rails_blob_url(Realty.find(params[:id]).uploads[0]) #Realty.where(id: @realty.id)
-          render json: @fileUpload ? @fileUpload : []
+          @fileUpload = Realty.find(params[:id]).uploads.map { |upload| generate_url_image(upload) }
+          render json: @fileUpload
         end
 
         def show
@@ -57,6 +56,30 @@ module Api
 
         def set_realty
           @realty = Realty.find(params[:id])
+        end
+
+        def generate_url_image(upload)
+          return upload.attributes.merge(:url => url_file(upload.key))
+        end
+
+        def url_file(key)
+          
+          require "google/cloud/storage"
+          
+          storage = Google::Cloud::Storage.new(
+            project_id: "remate-307517",
+            credentials: JSON.parse(ENV['GOOGLE_APPLICATION_CREDENTIALS'])
+          )
+      
+          bucket = storage.bucket ENV['GOOGLE_APPLICATION_BUCKET_NAME']
+      
+          file = bucket.file key
+          
+          if file
+            return file.signed_url method: "GET", expires: 300
+          else 
+            return ''
+          end
         end
       
       end

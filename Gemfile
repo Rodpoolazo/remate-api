@@ -21,6 +21,9 @@ gem 'puma', '~> 4.1'
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.4.2', require: false
 
+# official library for Google Cloud Storage
+gem "google-cloud-storage", "~> 1.8", require: false
+
 ## Auth
 gem 'devise'
 gem 'jwt'
