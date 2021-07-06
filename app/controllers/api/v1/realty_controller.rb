@@ -44,8 +44,10 @@ module Api
         end
 
         def images
-          @fileUpload = Realty.find(params[:id]).uploads.map { |upload| generate_url_image(upload) }
-          render json: @fileUpload
+          @fileUpload = FileUpload.where(model_id:params['id'])
+          @realty = Realty.find(params[:id])
+          @fileUploadFilter = @realty.uploads.map { |uploadt| generate_url_image(uploadt,@fileUpload) }
+          render json: @fileUploadFilter
         end
 
         def show
@@ -58,8 +60,17 @@ module Api
           @realty = Realty.find(params[:id])
         end
 
-        def generate_url_image(upload)
-          return upload.attributes.merge(:url => url_file(upload.key))
+        def generate_url_image(upload,fileUploadFilter)
+          fileUploadFilter.each do |fileUpload| 
+              if fileUpload.storage_id == upload.id && upload.filename == fileUpload.original_file_name
+                puts fileUpload.original_file_name
+                return upload.attributes
+                .merge(:url => url_file(upload.key))
+                .merge(:title => fileUpload.title || '')
+                .merge(:description => fileUpload.description || '')
+                .merge(:original_file_name => fileUpload.original_file_name)
+              end
+            end
         end
 
         def url_file(key)
