@@ -78,6 +78,4 @@ test:
 #
 production:
   <<: *default
-  database: remate_production
-  username: remate
-  password: <%= ENV['REMATE_DATABASE_PASSWORD'] %>
+  url: <%= ENV['DATABASE_URL'] %>
